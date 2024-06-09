@@ -12,7 +12,10 @@ const Signup = () => {
     name: "",
     userName: "",
     image: "",
+    hook:""
   });
+
+  const [slackStatus, setslackStatus] = useState("");
 
   const handleUserName = async (e) => {
     setUserDetails({ ...userDetails, userName: e.target.value });
@@ -27,6 +30,10 @@ const Signup = () => {
   };
   const handleEmail = async (e) => {
     setUserDetails({ ...userDetails, email: e.target.value });
+  };
+
+  const handleSlack = (e) => {
+    setslackStatus("1");
   };
 
   const handlieSignUp = async (e) => {
@@ -44,6 +51,7 @@ const Signup = () => {
         name: userDetails.name,
         userName: userDetails.userName,
         image: userDetails.image,
+        hook:userDetails.hook,
       }),
     });
     const json = await response.json();
@@ -80,6 +88,10 @@ const Signup = () => {
     const base64 = await converToBase64(file);
     setUserDetails({ ...userDetails, image: base64 });
   };
+
+  const handleHook = (e) => {
+    setUserDetails({ ...userDetails, hook: e.target.value });
+  }
 
   const converToBase64 = (file) => {
     return new Promise((resolve, rejects) => {
@@ -154,6 +166,42 @@ const Signup = () => {
             >
               <FaRegImage size="22PX" />
             </label>
+            <a
+              onClick={(e) => handleSlack(e)}
+              href="https://api.slack.com/apps"
+              className=" border-2 bg-white  py-1 pl-14 m-1 rounded-full text-lg"
+              target="_blank"
+            >
+              Connect with Slack Api
+              <img
+                rel="noreferrer"
+                src="https://yt3.googleusercontent.com/ytc/AIdro_nD88Qel1sWfD2NQ8tM1Ja2BJZuV-jgmUxc-VbpZX7XnkQ=s900-c-k-c0x00ffffff-no-rj"
+                className="w-8 h-8 mx-3 inline rounded-full"
+                alt="error"
+              />
+            </a>
+
+            {slackStatus == "1" ? (
+              <form className="bg-white border-2 mt-1 rounded-lg shadow-md  px-8 pt-2  ">
+                <div className="mb-4">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    for="fname"
+                  >
+                    Enter Channel Webhook here:
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    id="fname"
+                    name="fname"
+                    onChange={(e)=>handleHook(e)}
+                  />
+                </div>
+              </form>
+            ) : (
+              ""
+            )}
             <button
               className="bg-[#1D9BF0] border-none py-2 my-4 rounded-full text-lg "
               onClick={(e) => handlieSignUp(e)}

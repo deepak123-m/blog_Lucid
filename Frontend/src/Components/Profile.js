@@ -7,6 +7,7 @@ import { FaHeart } from "react-icons/fa6";
 import noteContext from "../Context/Notecontext";
 import React, { useContext, useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { disconnect } from "mongoose";
 
 let count = 0;
 
@@ -16,6 +17,8 @@ let user_id = "";
 let userfollowing = [];
 let userfollowers = [];
 
+
+
 const Profile = (props) => {
   let navigate = useNavigate();
   if (localStorage.getItem("token") === null) {
@@ -23,8 +26,10 @@ const Profile = (props) => {
   }
 
   const [folength, setfolength] = useState({ s: "", d: "" });
- 
+ const [status,setStatus] = useState("0")
   const location = useLocation();
+
+
 
   let context = useContext(noteContext);
 
@@ -36,6 +41,7 @@ const Profile = (props) => {
     updatePostLike,
     updatePostRetweet,
     deletePost,
+    disconSlack,
   } = context;
 
   const callUser = async () => {
@@ -75,6 +81,17 @@ const Profile = (props) => {
     e.preventDefault();
     deletePost(id);
   };
+
+  const handleDisconnect = async (id) => {
+
+    await disconSlack(id);
+
+    alert("Successfully Disconnected webhook ")
+    setStatus("1");
+    location.state.hook = ""
+    
+
+  }
 
   const handleicondelte = (user_id, _id) => {
     if (user_id !== "") {
@@ -197,7 +214,8 @@ const Profile = (props) => {
       );
     }
   };
-
+console.log("hook in profile")
+console.log(location.state.hook)
   const fetchPost = async () => {
     const postCount = await getPost();
 
@@ -253,7 +271,7 @@ const Profile = (props) => {
                 to="/following"
                 state={
                   location.state.yes === "yes"
-                    ? { following: userfollowing }
+                    ? { following: userfollowing ,id:location.state.id, current:"yes"}
                     : { following: location.state.flw }
                 }
                 className="text-blue-500 hover:underline"
@@ -282,6 +300,24 @@ const Profile = (props) => {
                 </div>
               </Link>
             </div>
+
+          {(location.state.yes === "yes" && location.state.hook !== "" && status === "0" )? (
+              
+
+            <button
+            onClick={(e)=>handleDisconnect(location.state.id)}
+            className=" border-2 bg-white ml-12 mb-4 py-1 pl-14 m-1 rounded-full text-lg">
+          Disconnect with Slack Api 
+          <img
+          rel="noreferrer"
+          src="https://yt3.googleusercontent.com/ytc/AIdro_nD88Qel1sWfD2NQ8tM1Ja2BJZuV-jgmUxc-VbpZX7XnkQ=s900-c-k-c0x00ffffff-no-rj"
+          className="w-8 h-8 mx-3 inline  rounded-full"
+          alt="error"
+          />
+      </button>
+            ) : ("")}
+
+
             <div className="text-sm ml-12 pb-4">
               <p>
                 🌐 Exploring the web's endless possibilities with MERN Stack 🚀

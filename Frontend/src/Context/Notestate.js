@@ -6,18 +6,20 @@ const Notestate = (props) => {
   const userInitial = [];
   const [user, setUser] = useState(userInitial);
   const host = "https://myblog-backend-7hyi.onrender.com";
+
   const [post, setPost] = useState([]);
   const [alluser, setalluser] = useState([]);
   const [commentAll,setComment] = useState([])
 
-  const loginUser = async (email, password) => {
+  const loginUser = async (email, password, hook) => {
     const response = await fetch(`${host}/blog/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, hook }),
     });
     const json = await response.json();
-
+    console.log("hookresponse")
+    console.log(json)
     return json;
   };
 
@@ -48,6 +50,7 @@ const Notestate = (props) => {
     });
     const users = await response.json();
     if (alluser.length !== 5) {
+      console.log("contra")
       setalluser(alluser.concat(users));
     }
 
@@ -95,6 +98,18 @@ const Notestate = (props) => {
     setPost(post.concat(json));
   };
 
+  const unfollow = async(mainid,nrmlid) => {
+    const response = await fetch(`${host}/blog/unfollow`,{
+      method:"PUT",
+      headers:{
+        "content-Type":"application/json",
+      },
+      body: JSON.stringify({mainid,nrmlid}),
+    });
+   await response.json();
+   return getallUser();
+  }
+
   const getComment = async () => {
    commentAll.splice(0);
     const response = await fetch(`${host}/blog/comments`, {
@@ -109,10 +124,26 @@ const Notestate = (props) => {
   };
 
 
+  const disconSlack = async(id) => {
+
+    const response = await fetch(`${host}/blog/deletehook`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      id
+      }),
+    });
+
+  }
+
     const addComment = async (
    name,
    postId,
-   comments
+   comments,
+   userid,
+   title,
     ) => {
       
       const response = await fetch(`${host}/blog/comment/new`, {
@@ -123,7 +154,9 @@ const Notestate = (props) => {
         body: JSON.stringify({
           name,
           postId,
-          comments
+          comments,
+          userid,
+          title
         }),
       });
 
@@ -177,9 +210,13 @@ const Notestate = (props) => {
         },
         body: JSON.stringify({ id }),
       }
+
+      
     );
 
-     await response.json();
+    const fol = await response.json();
+    getallUser();
+    return fol;
    
   };
 
@@ -219,6 +256,8 @@ const Notestate = (props) => {
         addComment,
         commentAll,
         getComment,
+        disconSlack,
+        unfollow,
 
       }}
     >

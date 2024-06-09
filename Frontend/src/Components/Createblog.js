@@ -150,7 +150,7 @@ const Createblog = () => {
                   {" "}
                   <button
                     onClick={(e) => handlePost(e)}
-                    className="bg-blue-500  w-16 font-bold  h-8  mr-3 rounded-2xl"
+                    className="bg-blue-500  w-16 font-bold text-white h-8  mr-3 rounded-2xl"
                     type="submit"
                   >
                     Post

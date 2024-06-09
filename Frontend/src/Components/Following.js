@@ -1,20 +1,42 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import noteContext from "../Context/Notecontext";
 
 const Following = () => {
   let navigate = useNavigate();
+  const[all,setall] = useState("")
 
   if (localStorage.getItem("token") === null) {
     navigate("/login");
   }
   let context = useContext(noteContext);
-  const { alluser } = context;
+  const { alluser,unfollow } = context;
   const location = useLocation();
 
-  const render = (name, userName, id, image, following, followers) => {
-    if (!location.state.following.includes(id)) {
+
+
+  const handleUnfollow = async(mainid,nrmlid,e) => {
+    e.preventDefault();
+
+   const user_all=  await unfollow(mainid,nrmlid);
+    setall(".");
+    alert("successfully Unfollowed")
+
+  }
+  console.log(alluser)
+
+  const render = (name, userName, id, image, following, followers,index,main_user_id) => {
+    
+    if (!location.state.following.includes(id) ) {
+   
     } else {
+      console.log(location.state.id)
+      console.log(name)
+      console.log(alluser[index].followers)
+   
+    if(alluser[index].followers.includes(main_user_id))
+      {
+       
       return (
         <Link
           to="/profile"
@@ -46,9 +68,17 @@ const Following = () => {
               </div>
             </div>
             <div className="pt-5"></div>
+
+            <button
+                onClick={(e) => handleUnfollow(location.state.id,id,e)}
+                className="bg-gray-300  hover:scale-110 font-bold mr-4  py-1 px-4 text-black rounded-2xl"
+              >
+                Unfollow{all}
+              </button>
           </div>{" "}
         </Link>
       );
+    }
     }
   };
 
@@ -60,7 +90,7 @@ const Following = () => {
 
           {alluser &&
             alluser.map(
-              ({ name, userName, _id, image, following, followers }) => {
+              ({ name, userName, _id, image, following, followers },index) => {
                 let userid = _id;
                 return render(
                   name,
@@ -68,7 +98,9 @@ const Following = () => {
                   userid,
                   image,
                   following,
-                  followers
+                  followers,
+                  index,
+                  location.state.id,
                 );
               }
             )}

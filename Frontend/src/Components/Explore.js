@@ -14,6 +14,8 @@ const Explore = () => {
   const handleFollow = async (id, uid, e) => {
     e.preventDefault();
     const fol = await follow(id, uid);
+    console.log("fol")
+    console.log(fol)
     setusermainid(fol);
 
     alert("succesfully followed");
@@ -86,7 +88,7 @@ const Explore = () => {
       <div className="  rounded-2xl md:mx-8 m-14 bg-white w-2/8">
         <div className="text-black">
           <div className="text-4xl font-bold text-blue-600 tracking-wider  flex justify-center items-center pt-4 pl-4 pb-2">
-            Check Author's Profiles & Who to Follow?...
+            Check Author's Profiles & Who to Follow...?
           </div>
 
           {alluser &&

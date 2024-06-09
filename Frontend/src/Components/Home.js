@@ -13,6 +13,7 @@ let uusername = "";
 let userid = "";
 let following;
 let followers;
+let userHook;
 
 const Home = () => {
   let navigate = useNavigate();
@@ -34,6 +35,8 @@ const Home = () => {
     followers = userimag.followers;
     following = userimag.following;
     userid = userimag._id;
+    userHook = userimag.hook;
+
   };
 
   useEffect(() => {
@@ -81,6 +84,7 @@ const Home = () => {
                   flw: following,
                   flwrs: followers,
                   yes: "yes",
+                  hook:userHook,
                 }}
               >
                <button>{name}</button>

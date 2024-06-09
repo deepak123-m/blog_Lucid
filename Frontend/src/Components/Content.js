@@ -122,7 +122,7 @@ const Content = () => {
                   description,
                   userName,
                   name,
-
+                    user,
                   _id,
 
                   profileimage,
@@ -153,6 +153,7 @@ const Content = () => {
                     mainname={postImage.name}
                     date={date}
                     index={index}
+                    user={user}
                   />
                 );
               }

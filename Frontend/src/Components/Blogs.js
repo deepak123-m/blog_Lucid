@@ -15,11 +15,11 @@ const Blogs = () => {
     setComment(e.target.value);
   };
   console.log("comment all");
-  console.log(commentAll);
-
+  
+console.log(location.state.userid)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addComment(location.state.mainnames, location.state._ids, comment);
+    await addComment(location.state.mainnames, location.state._ids, comment, location.state.userid,location.state.titles);
     await getComment();
     setComment("");
   };
